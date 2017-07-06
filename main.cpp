@@ -1,55 +1,44 @@
 #include <opencv2/opencv.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-
 using namespace cv;
 
 int main() {
-
-    // More Comments
-    
-
+    // Read in the two images and create a new window
     cv::Mat imgL = cv::imread("TsukubaL.png", cv::IMREAD_GRAYSCALE);
     cv::Mat imgR = cv::imread("TsukubaR.png", cv::IMREAD_GRAYSCALE);
-    namedWindow("Window");
-    int numDisparities;
-    int numwindow;
-    int sliderPosition;
+    namedWindow("Window", WINDOW_NORMAL);
 
-    cv::createTrackbar("Disparity", "Window", NULL, 10);
+    // Set the initial dispariy and window value to 5
+    int numDisparities = 5;
+    int numWindow = 5;
 
+    // Create the trackbar with size of 10
+    // range of disparity: 0 - 160
+    // Range of window: 5 - 105
+    cv::createTrackbar("Disparity", "Window", &numDisparities, 10);
+    cv::createTrackbar("numWindow", "Window", &numWindow, 10);
+
+    // Exit program if either image failed to load
     if(imgL.empty() || imgR.empty())
     {
         std::cout << "Error reading message" << std::endl;
         return -1;
     }
-//    imshow("imgL", imgL);
-//    imshow("imgR", imgR);
 
-    Ptr<StereoBM> stereo;
-
+    // outputArrays to hold the disparity map
     Mat outputArray = Mat( imgL.rows, imgL.cols, CV_16S );
     Mat displayArray = Mat( imgL.rows, imgL.cols, CV_8U );
 
-    int count = 0;
     while(1) {
-        count ++;
-        sliderPosition = getTrackbarPos("Disparity", "Window");
-        std::cout << count << "    ";
-        std::cout << sliderPosition << "    ";
-        numDisparities = 16 * sliderPosition;
-        std::cout << numDisparities << std::endl;
-        //      StereoBM stereo(StereoBM::BASIC_PRESET, numDisparities, 25);
-        stereo = new StereoBM(StereoBM::BASIC_PRESET, numDisparities, 25);
-
-        (*stereo)(imgL, imgR, outputArray, CV_16S);
+        // Initialze a new stereoBM object
+        StereoBM stereo(StereoBM::BASIC_PRESET, numDisparities * 16, numWindow * 2 + 5);
+        // get the disparity between the two images, and comvert 16S to 8UC3
+        (stereo)(imgL, imgR, outputArray, CV_16S);
         outputArray.convertTo( displayArray, CV_8UC3);
 
+        // Display the image in window, wait.
         imshow("Window", displayArray);
-        waitKey(50);
-
+        waitKey(100);
+        
     }
     
     return 0;
