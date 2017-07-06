@@ -6,10 +6,10 @@
 
 using namespace cv;
 
-//I changed it back
-// Testing branch
-// This is a test
 int main() {
+
+    // More Comments
+    
 
     cv::Mat imgL = cv::imread("TsukubaL.png", cv::IMREAD_GRAYSCALE);
     cv::Mat imgR = cv::imread("TsukubaR.png", cv::IMREAD_GRAYSCALE);
