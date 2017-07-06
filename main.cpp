@@ -8,6 +8,7 @@ using namespace cv;
 
 //I changed it back
 // Testing branch
+// This is a test
 int main() {
 
     cv::Mat imgL = cv::imread("TsukubaL.png", cv::IMREAD_GRAYSCALE);
@@ -24,8 +25,8 @@ int main() {
         std::cout << "Error reading message" << std::endl;
         return -1;
     }
-    imshow("imgL", imgL);
-    imshow("imgR", imgR);
+//    imshow("imgL", imgL);
+//    imshow("imgR", imgR);
 
     Ptr<StereoBM> stereo;
 
@@ -50,19 +51,6 @@ int main() {
         waitKey(50);
 
     }
-
-    //   Ptr<StereoBM> stereo = new StereoBM(StereoBM::BASIC_PRESET, 320, 25);
-    //
-    //   Mat outputArray = Mat( imgL.rows, imgL.cols, CV_16S );
-    //   Mat displayArray = Mat( imgL.rows, imgL.cols, CV_8U );
-    //
-    //   stereo(imgL, imgR, outputArray, CV_16S);
-    //   outputArray.convertTo( displayArray, CV_8UC3);
-    //
-    //   imshow("Window", displayArray);
-    //   waitKey(0);
-    
-    //   StereoBM stereo(StereoBM::BASIC_PRESET, 48, 25);
     
     return 0;
 }
